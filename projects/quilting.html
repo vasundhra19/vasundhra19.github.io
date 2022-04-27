@@ -1,0 +1,335 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Texture Synthesis and Transfer</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+                <header id="header">
+                    <h1><a href="../index.html">Vasundhra</a></h1>
+                    <nav>
+                        <a href="#menu">Menu</a>
+                    </nav>
+                </header>
+
+                <!-- Menu -->
+                <nav id="menu">
+                    <div class="inner">
+                        <h2>Menu</h2>
+                        <ul class="links">
+                            <li><a href="../index.html">Home</a></li>
+                            <li><a href="../projects.html">Projects</a></li>
+                            <li><a href="../elements.html">About</a></li>
+                        </ul>
+                        <a href="#" class="close">Close</a>
+                    </div>
+                </nav>
+
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>Texture Synthesis and Transfer</h2>
+								<p>
+                                    The goal of this project was to explore some texture synthesis and transfer techniques.
+                                </p>
+							</div>
+						</header>
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+
+									<section>
+                                        <h3 class="major">Overview</h3>
+                                        <p>
+                                            Texture synthesis is the creation of a larger texture image from a small sample. 
+                                            Texture transfer is giving an object the appearance of having the same texture as a sample while preserving its basic shape. 
+                                            For texture synthesis, the main idea is to sample patches and lay them down in overlapping patterns, 
+                                            such that the overlapping regions are similar. Texture transfer is achieved by encouraging sampled patches 
+                                            to have similar appearance to a given target image, as well as matching overlapping regions of already sampled 
+                                            patches. This project uses important techniques such as template matching, finding seams, and masking. 
+                                        </p>
+                                        <p></p>
+                                    </section>
+                                    <section>
+                                        <h3 class="major">Texture Synthesis</h3>
+                                        <h4>Overlapping Patches</h4>
+                                        <p>
+                                            The first implementation here utilizes overlapping patches. 
+                                            We start with a random patch for the top left corner of the image. Then, we calcute 
+                                            the SSD (Squared Sum Difference) of the overlapping regions with every possible patch 
+                                            in the sample. The new patch is then selected randomly from N (N = 4 in this case) patches
+                                            with the lowest SSD cost. 
+                                            For the following result, I used a sample image with input_size=300x300 to produce an 
+                                            output image of size=500x500 using patches of size=31x31. There was overlap of 11 pixels.
+                                            The result is pretty good, however we still some vertical lines in the image.
+                                        </p>
+                                        <div class="row gtr-uniform">
+                                            <div class="col-6">
+                                                <h5>Input Sample</h5>
+                                                <span class="image fit">
+                                                <img 
+                                                  src="../images/quilting/input_sample.png"
+                                                  alt="" 
+                                                  style="object-fit:contain;
+                                                    width:200px;
+                                                    height:200px;
+                                                    margin-top:70px;
+                                                    margin-left:70px;
+                                                    "/>
+                                            </span></div>
+                                            <div class="col-6">
+                                                <h5>Output Texture</h5>
+                                                <span class="image fit">
+                                                <img 
+                                                  src="../images/quilting/output_simple.png" 
+                                                  alt=""
+                                                />
+                                            </span></div>
+                                        </div>
+                                        <p></p>
+                                        <h4>Seam Finding</h4>
+                                        <p>
+                                            The seam finding method is implemented here to improve the result from the overlapping patches.
+                                            Here, in addition to overlapping patches, I find the minumum cost path through the SSD (Squared Sum Difference)
+                                            image of the patch to decide which pixels come from the output (overlapping portion from the existing patch) vs 
+                                            the selected patch (overlapping portion from the new patch). Below, I will explain the details of this method.
+                                        </p>
+                                        <p>First, the SSD cost of the output (existing patch to be overlapped) is calculated and a patch with low SSD is selected. </p>
+                                        <div class="row gtr-uniform">
+                                            <div class="col-6">
+                                                <h5>Overlapping region in output:</h5>
+                                                <span class="image fit">
+                                                <img 
+                                                  src="../images/quilting/overlapping_template.png"
+                                                  alt="" 
+                                                  style="object-fit:contain;
+                                                    width:200px;
+                                                    height:200px;
+
+                                                    "/>
+                                            </span></div>
+                                            <div class="col-6">
+                                                <h5>Selected Patch:</h5>
+                                                <span class="image fit">
+                                                <img 
+                                                  src="../images/quilting/overlapping_patch.png" 
+                                                  alt=""
+                                                  style="object-fit:contain;
+                                                    width:200px;
+                                                    height:200px;
+                                                    "
+                                                />
+                                            </span></div>
+                                        </div>
+                                        <p></p>
+                                        <p>We then get the vertical and horizontal ssd_cost between the selected patch and output patch.</p>
+                                        <div class="row gtr-uniform">
+                                            <div class="col-6">
+                                                <h5>Vertical SSD:</h5>
+                                                <span class="image fit">
+                                                <img 
+                                                  src="../images/quilting/ssd_patch_vert.png"
+                                                  alt="" 
+                                                  style="object-fit:contain;
+                                                    width:200px;
+                                                    height:200px;
+
+                                                    "/>
+                                            </span></div>
+                                            <div class="col-6">
+                                                <h5>Horizontal SSD:</h5>
+                                                <span class="image fit">
+                                                <img 
+                                                  src="../images/quilting/ssd_patch_horz.png" 
+                                                  alt=""
+                                                  style="object-fit:contain;
+                                                    width:200px;
+                                                    height:200px;
+                                                    "
+                                                />
+                                            </span></div>
+                                        </div>
+                                        <p></p>
+                                        <p>Using these two ssd_costs, we first find the vertical and horizontal cut_masks 
+                                        and then combine the two.</p>
+                                        <div class="row gtr-uniform">
+                                            <div class="col-4">
+                                                <h5>Vertical Mask:</h5>
+                                                <span class="image fit">
+                                                <img 
+                                                  src="../images/quilting/vertical_mask.png"
+                                                  alt="" 
+                                                  style="object-fit:contain;
+                                                    width:200px;
+                                                    height:200px;
+
+                                                    "/>
+                                            </span></div>
+                                            <div class="col-4">
+                                                <h5>Horizontal Mask:</h5>
+                                                <span class="image fit">
+                                                <img 
+                                                  src="../images/quilting/horizontal_mask.png" 
+                                                  alt=""
+                                                  style="object-fit:contain;
+                                                    width:200px;
+                                                    height:200px;
+                                                    "
+                                                />
+                                            </span></div>
+                                            <div class="col-4">
+                                                <h5>Combined Mask:</h5>
+                                                <span class="image fit">
+                                                <img 
+                                                  src="../images/quilting/combination_mask.png" 
+                                                  alt=""
+                                                  style="object-fit:contain;
+                                                    width:200px;
+                                                    height:200px;
+                                                    "
+                                                />
+                                            </span></div>
+                                        </div>
+                                        <p></p>
+                                        <p>Then we perform the cut on the output patch and selected patch and combine the two to create the new patch</p>
+                                            <div class="row gtr-uniform">
+                                                <div class="col-4">
+                                                    <h5>Output Patch:</h5>
+                                                    <span class="image fit">
+                                                    <img 
+                                                      src="../images/quilting/template_after_cut.png"
+                                                      alt="" 
+                                                      style="object-fit:contain;
+                                                        width:200px;
+                                                        height:200px;
+    
+                                                        "/>
+                                                </span></div>
+                                                <div class="col-4">
+                                                    <h5>Selected Patch:</h5>
+                                                    <span class="image fit">
+                                                    <img 
+                                                      src="../images/quilting/patch_after_cut.png" 
+                                                      alt=""
+                                                      style="object-fit:contain;
+                                                        width:200px;
+                                                        height:200px;
+                                                        "
+                                                    />
+                                                </span></div>
+                                                <div class="col-4">
+                                                    <h5>Combined Patch:</h5>
+                                                    <span class="image fit">
+                                                    <img 
+                                                      src="../images/quilting/combined_template.png" 
+                                                      alt=""
+                                                      style="object-fit:contain;
+                                                        width:200px;
+                                                        height:200px;
+                                                        "
+                                                    />
+                                                </span></div>
+                                            </div>
+                                            <p></p>
+                                            <p>The resulting image using this method for each patch in the output is as follows:</p>
+                                            <div class="row gtr-uniform">
+                                                <div class="col-6">
+                                                    <h5>Input Sample</h5>
+                                                    <span class="image fit">
+                                                    <img 
+                                                      src="../images/quilting/input_sample.png"
+                                                      alt="" 
+                                                      style="object-fit:contain;
+                                                        width:200px;
+                                                        height:200px;
+                                                        margin-top:70px;
+                                                        margin-left:70px;
+                                                        "/>
+                                                </span></div>
+                                                <div class="col-6">
+                                                    <h5>Output Texture</h5>
+                                                    <span class="image fit">
+                                                    <img 
+                                                      src="../images/quilting/output_cut.png" 
+                                                      alt=""
+                                                    />
+                                                </span></div>
+                                            </div>
+									</section>
+                                    <section>
+                                        <h3 class="major">Texture Transfer</h3>
+                                        <p>
+                                            Here, I implement texture transfer using the seam finding method described above. 
+                                            In addition to the ssd_cost for the overlapping region, the ssd_cost between the sample texture 
+                                            and a patch in the target guidance image at the same location as we are writing to in the output image 
+                                            is also included. 
+                                            This additional cost ensures that we select patches that are similar in intensity to the target image.        
+                                            The total ssd_cost is calculated using the equation:
+                                        </p>
+                                        <p>
+                                            ssd_cost = alpha*(ssd_cost_overlap) + (1-alpha)*(ssd_cost_guidance)
+                                        </p>
+                                        <p>
+                                            For the following result, a patch_size of 25x25 and an overlap of 11 pixels was used. 
+                                            The patch with the lowest ssd_cost was always chosen. The alpha was set to 0.25.                                       </p>
+                                            <div class="row gtr-uniform">
+                                                <div class="col-4">
+                                                    <h5>Input Texture:</h5>
+                                                    <span class="image fit">
+                                                    <img 
+                                                      src="../images/quilting/text_trans1_input.png"
+                                                      alt="" 
+                                                      />
+                                                </span></div>
+                                                <div class="col-4">
+                                                    <h5>Target Image:</h5>
+                                                    <span class="image fit">
+                                                    <img 
+                                                      src="../images/quilting/text_trans1_target.png" 
+                                                      alt=""
+                                                      
+                                                    />
+                                                </span></div>
+                                                <div class="col-4">
+                                                    <h5>Output Image:</h5>
+                                                    <span class="image fit">
+                                                    <img 
+                                                      src="../images/quilting/text_trans1_output.png" 
+                                                      alt=""
+                                                      
+                                                    />
+                                                </span></div>
+                                            </div>                                        <p></p>
+                                    </section>
+
+								</div>
+							</div>
+					</section>
+			</div>
+
+		<!-- Scripts -->
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+
+	</body>
+</html>

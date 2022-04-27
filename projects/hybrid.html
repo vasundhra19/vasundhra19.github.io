@@ -1,0 +1,262 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Image Filtering and Enhancements</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+                <header id="header">
+                    <h1><a href="../index.html">Vasundhra</a></h1>
+                    <nav>
+                        <a href="#menu">Menu</a>
+                    </nav>
+                </header>
+
+                <!-- Menu -->
+                <nav id="menu">
+                    <div class="inner">
+                        <h2>Menu</h2>
+                        <ul class="links">
+                            <li><a href="../index.html">Home</a></li>
+                            <li><a href="../projects.html">Projects</a></li>
+                            <li><a href="../elements.html">About</a></li>
+                        </ul>
+                        <a href="#" class="close">Close</a>
+                    </div>
+                </nav>
+
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>Image Filtering and Enhancements</h2>
+								<p>
+                                    The goal of this project was to explore some image filtering techniques as well as frequency representations.
+                                </p>
+							</div>
+						</header>
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+
+									<section>
+                                        <h3 class="major">Hybrid Images</h3>
+                                        <p>
+                                            <i>Hybrid</i> images are static images that change in interpretation as a function of the viewing distance. The basic idea is that high frequency tends to dominate perception when it is available, but, at a distance, only the low frequency (smooth) part of the signal can be seen. By blending the high frequency portion of one image with the low-frequency portion of another, you get a hybrid image that leads to different interpretations at different distances.
+                                        </p>
+                                        <h4>Original Images</h4>
+                                        <div class="box alt">
+                                            <div class="row gtr-uniform">
+                                                <div class="col-6"><span class="image fit"><img src="../images/hybrid/Buttons.JPG" alt="" style="object-fit:contain;
+                                                    width:500px;
+                                                    height:280px;"/></span></div>
+                                                <div class="col-6"><span class="image fit"><img src="../images/hybrid/Leo.jpg" alt=""/></span></div>
+                                            </div>
+                                        </div>
+                                        <h4>Filtering the Images</h4>
+                                        <p>
+                                            The original images were converted to grayscale for processing. The first image (image of the cat) was filtered using a high pass filter, which was created using a gaussian kernel.
+                                            The gaussian filtered image was then subtracted from the original image to get laplacian filtered image below. Additionally, we can confirm from the log fequency representation of the image
+                                            that only the high frequecies remain and the low frequencies (origin of the graph) are filtered out. 
+                                        </p>
+                                        <div class="row gtr-uniform">
+                                            <div class="col-6"><span class="image fit">
+                                                <img 
+                                                  src="../images/hybrid/buttons_filtered.png"
+                                                  alt="" 
+                                                  style="object-fit:contain;
+                                                    width:500px;
+                                                    height:280px;"/>
+                                            </span></div>
+                                            <div class="col-6"><span class="image fit">
+                                                <img 
+                                                  src="../images/hybrid/buttons_highfft.png" 
+                                                  alt=""
+                                                  style="object-fit:contain;
+                                                    width:500px;
+                                                    height:280px;"/>
+                                            </span></div>
+                                        </div>
+                                        <p></p>
+                                        <p>
+                                            The second image (image of the dog) was filtered using a low pass filter, which was created using a gaussian kernel.
+                                            We can confirm from the log fequency representation of the image
+                                            that only the low frequecies (origin of the graph) remain and the high frequencies are filtered out. 
+                                        </p>
+                                        <div class="row gtr-uniform">
+                                            <div class="col-6"><span class="image fit">
+                                                <img 
+                                                  src="../images/hybrid/leo_filtered.png"
+                                                  alt="" 
+                                                  style="object-fit:contain;
+                                                    width:500px;
+                                                    height:280px;"/>
+                                            </span></div>
+                                            <div class="col-6"><span class="image fit">
+                                                <img 
+                                                  src="../images/hybrid/leo_lowfft.png" 
+                                                  alt=""
+                                                  style="object-fit:contain;
+                                                    width:500px;
+                                                    height:280px;"/>
+                                            </span></div>
+                                        </div>
+                                        <h4>Result</h4>
+                                        <p>The result of adding the two images is shown below. When the photo is enlarged, we see the picture of the cat, however,
+                                            on a smaller scale, the picture of the dog dominates. This same effect would be acheived by physically moving closer/away from the image.
+                                        </p>
+                                        <div class="row gtr-uniform">
+                                            <div class="col-6"><span class="image fit">
+                                                <img 
+                                                  src="../images/hybrid/main_hybrid.png"
+                                                  alt="" 
+                                                  style="object-fit:contain;
+                                                    width:500px;
+                                                    height:500px;"/>
+                                            </span></div>
+                                            <div class="col-6"><span class="image fit">
+                                                <img 
+                                                  src="../images/hybrid/main_hybrid.png" 
+                                                  alt=""
+                                                  style="object-fit:contain;
+                                                    width:500px;
+                                                    height:75px;
+                                                    margin-top:200px;"
+                                                 />
+                                            </span></div>
+                                        </div>
+									</section>
+                                    <p></p>
+                                    <p></p>
+                                    <section>
+                                        <h3 class="major">Contrast Enhancement</h3>
+                                        <p>
+                                            We start with an image with really bad contrast. It is extremely hard to see the details within the clouds or the land. 
+                                            From the histogram of the image intensities, we see that the intensities are really high, ranging between 180-255 mostly.
+                                        </p>
+                                        <div class="row gtr-uniform">
+                                            <div class="col-6"><span class="image fit">
+                                                <img 
+                                                  src="../images/hybrid/bad_contrast1.jpeg"
+                                                  alt="" 
+                                                  style="object-fit:contain;
+                                                    width:500px;
+                                                    height:280px;"/>
+                                            </span></div>
+                                            <div class="col-6"><span class="image fit">
+                                                <img 
+                                                  src="../images/hybrid/contrast_hist_ori.png" 
+                                                  alt=""
+                                                  style="object-fit:contain;
+                                                    width:500px;
+                                                    height:280px;"/>
+                                            </span></div>
+                                        </div>
+                                        <p></p>
+                                        <p>
+                                            To improve the contrast in this image, I implemented histogram equalization to 'spread' out the intensities. 
+                                            Using the histogram and cumulative sum from the original iamge, the following equation was applied:
+
+                                        </p>
+                                        <div class="row gtr-uniform">
+                                            <div class="col-12"><span class="image fit">
+                                                <img 
+                                                  src="../images/hybrid/hist_eqn.png"
+                                                  alt="" 
+                                                  style="object-fit:contain;
+                                                    width:500px;"
+                                                />
+                                            </span></div>
+                                        </div>
+                                        <p></p>
+                                        <p>
+                                            Here, ​h(v)​ represents the new intensity given original intensity​ v. cdf(v)​ represents the cumulative sum at intensity ​v.​ 
+                                            c​df_min ​represents the minimum value of the cumulative sum (0 in this case).  
+                                            ​(M x N) ​stands for the total number of pixels in the image. L ​is the number of gray levels used, in this case ​L = 256.
+                                        </p>
+                                        <p>
+                                            After applying this function to each pixel in the original image, I was able to get the new intensity for each pixel, and hence, get the new image.
+                                            We can see loss of information due to compression in the bottom left part of the image as well as the contrast change is too drastic within the image. 
+                                            This could be improved by blending with the original image.
+                                        </p>
+                                        <div class="row gtr-uniform">
+                                            <div class="col-6"><span class="image fit">
+                                                <img 
+                                                  src="../images/hybrid/contrast_image.png"
+                                                  alt="" 
+                                                  style="object-fit:contain;
+                                                    width:500px;
+                                                    height:280px;"/>
+                                            </span></div>
+                                            <div class="col-6"><span class="image fit">
+                                                <img 
+                                                  src="../images/hybrid/contrast_hist_final.png" 
+                                                  alt=""
+                                                  style="object-fit:contain;
+                                                    width:500px;
+                                                    height:280px;"/>
+                                            </span></div>
+                                        </div>
+                                        <p></p>
+									</section>
+                                    <section>
+                                        <h3 class="major">Color Enhancement</h3>
+                                        <p>
+                                            We start with an image with 'bad' colors, that is the colors looks faded and are not very sharp.
+                                            The image colors are improved by first converting the image to the HSV color space.
+                                            The saturation value is then normalized to the range between 0-1. 
+                                            The square root of the saturation was set as the new saturation value. 
+                                            The <b>H</b>ue and <b>V</b>alue channels were left unchanged. This resulted in sharper colors 
+                                            seen on the image to the right.
+                                        </p>
+                                        <div class="row gtr-uniform">
+                                            <div class="col-6"><span class="image fit">
+                                                <img 
+                                                  src="../images/hybrid/bad-color1.jpeg"
+                                                  alt="" 
+                                                  style="object-fit:contain;
+                                                    width:500px;
+                                                    height:280px;"/>
+                                            </span></div>
+                                            <div class="col-6"><span class="image fit">
+                                                <img 
+                                                  src="../images/hybrid/color_enhanced.png" 
+                                                  alt=""
+                                                  style="object-fit:contain;
+                                                    width:500px;
+                                                    height:280px;"/>
+                                            </span></div>
+                                        </div>
+                                        <p></p>
+                                    </section>
+								</div>
+							</div>
+
+					</section>
+			</div>
+
+		<!-- Scripts -->
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+
+	</body>
+</html>
